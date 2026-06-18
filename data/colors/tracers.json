@@ -1,0 +1,44 @@
+{
+	"9mm": {
+		"color": {
+			"regular": "FEE2C6",
+			"saturated": "FFD9B3",
+			"chambered": "FF7F00"
+		}
+	},
+	"12gauge": {
+		"color": {
+			"regular": "FEDCDC",
+			"saturated": "FEDCDC",
+			"chambered": "FF0000"
+		}
+	},
+	"308subsonic": {
+		"color": {
+			"regular": "252B00",
+			"saturated": "465000",
+			"chambered": "131600"
+		}
+	},
+	"762mm": {
+		"color": {
+			"regular": "C5D6FE",
+			"saturated": "ABC4FF",
+			"chambered": "004CFF"
+		}
+	},
+	"556mm": {
+		"color": {
+			"regular": "66FF66",
+			"saturated": "66FF99",
+			"chambered": "66FF33"
+		}
+	},
+	"5.7mm": {
+		"color": {
+			"regular": "#005254",
+			"saturated": "#003e3f",
+			"chambered": "#00292a"
+		}
+	}
+}

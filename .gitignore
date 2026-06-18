@@ -1,0 +1,18 @@
+# Common stuff
+**/node_modules
+**/lib
+**/tmp
+.env
+.idea
+*.db
+
+# Client stuff
+client/scripts/bundle.min.js
+.vercel
+
+bin
+.vs
+Islandr.code-workspace
+Islandr.io.njsproj
+Islandr.io.sln
+obj
