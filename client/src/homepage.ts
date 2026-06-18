@@ -220,9 +220,35 @@ console.log(getMode())
 			.then(data => { el.textContent = `${data.online} player${data.online === 1 ? "" : "s"} online`; })
 			.catch(() => { el.textContent = "Server offline"; });
 	}
+	// Escape user-controlled usernames before injecting into the leaderboard markup.
+	function escapeHtml(s: string): string {
+		return s.replace(/[&<>"']/g, c => (<{ [k: string]: string }>{ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+	}
+	// Survival leaderboard — polls the game server's /leaderboard endpoint.
+	function refreshLeaderboard() {
+		const el = document.getElementById("leaderboard");
+		const addr = (<HTMLInputElement>document.getElementById("address"))?.value;
+		if (!el || !addr) return;
+		const proto = location.protocol === "https:" ? "https" : "http";
+		fetch(`${proto}://${addr}/leaderboard`)
+			.then(res => res.json())
+			.then(data => {
+				const list: { username: string; survivedMs: number; kills: number }[] = data.leaderboard || [];
+				if (!list.length) { el.innerHTML = "<li>No survivors yet</li>"; return; }
+				el.innerHTML = list.map(e => {
+					const totalSec = Math.max(0, Math.floor(e.survivedMs / 1000));
+					const m = Math.floor(totalSec / 60), s = totalSec % 60;
+					const t = m > 0 ? `${m}m ${s}s` : `${s}s`;
+					return `<li><span class="lb-name">${escapeHtml(e.username)}</span><span class="lb-time">${t} · ${e.kills} kill${e.kills === 1 ? "" : "s"}</span></li>`;
+				}).join("");
+			})
+			.catch(() => { el.innerHTML = "<li>Server offline</li>"; });
+	}
 	if (!window.location.href!.includes("/loadout")) {
 		refreshOnlineCount();
+		refreshLeaderboard();
 		setInterval(refreshOnlineCount, 5000);
+		setInterval(refreshLeaderboard, 5000);
 	}
 
 	export function checkLoggedIn() {

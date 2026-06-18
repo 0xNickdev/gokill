@@ -850,3 +850,52 @@ div#menu div.panel#account {
     cursor: pointer;
     display: none;
 }
+
+/* Live online player count on the menu */
+.online-count {
+    margin: 1vh auto;
+    font-size: 1.1vw;
+    font-weight: bold;
+    color: #80B251;
+    text-shadow: 0 0 4px rgba(0, 0, 0, 0.6);
+}
+
+/* Survival leaderboard on the menu */
+.leaderboard {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    counter-reset: lb;
+}
+
+.leaderboard li {
+    counter-increment: lb;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1vw;
+    padding: 0.5vh 0.6vw;
+    border-radius: 0.5vw;
+    margin-bottom: 0.4vh;
+    background-color: rgba(255, 255, 255, 0.06);
+}
+
+.leaderboard li::before {
+    content: counter(lb) ".";
+    margin-right: 0.6vw;
+    color: #80B251;
+    font-weight: bold;
+}
+
+.leaderboard .lb-name {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.leaderboard .lb-time {
+    color: #ccc;
+    font-size: 0.9em;
+    white-space: nowrap;
+}

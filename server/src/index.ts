@@ -15,14 +15,36 @@ import { MapData } from "./types/data";
 
 export var ticksElapsed = 0;
 
+// Survival leaderboard — top survivors across rounds, persisted in memory for the
+// lifetime of the server process. Recorded by Player.die() on every player death.
+export interface LeaderboardEntry { username: string; survivedMs: number; kills: number; }
+export const leaderboard: LeaderboardEntry[] = [];
+export function recordSurvival(username: string, survivedMs: number, kills: number) {
+	leaderboard.push({ username: username || "Unknown", survivedMs, kills });
+	leaderboard.sort((a, b) => b.survivedMs - a.survivedMs);
+	if (leaderboard.length > 10) leaderboard.length = 10;
+}
+// Human-readable survival duration, e.g. "2m 13s" or "47s".
+export function formatSurvival(ms: number): string {
+	const totalSec = Math.max(0, Math.floor(ms / 1000));
+	const m = Math.floor(totalSec / 60);
+	const s = totalSec % 60;
+	return m > 0 ? `${m}m ${s}s` : `${s}s`;
+}
+
 const port = Number(process.env.PORT) || 8080;
 // Lightweight HTTP server sharing the same port as the WebSocket server, so the
-// menu can poll the live player count (and Railway gets a health route at /).
+// menu can poll the live player count and survival leaderboard (and Railway gets a health route at /).
 const httpServer = http.createServer((req, res) => {
 	res.setHeader("Access-Control-Allow-Origin", "*");
 	if (req.url === "/count" || req.url === "/status") {
 		res.setHeader("Content-Type", "application/json");
 		res.end(JSON.stringify({ online: sockets.size }));
+		return;
+	}
+	if (req.url === "/leaderboard") {
+		res.setHeader("Content-Type", "application/json");
+		res.end(JSON.stringify({ leaderboard }));
 		return;
 	}
 	res.end("Islandr game server");

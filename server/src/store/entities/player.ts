@@ -1,4 +1,4 @@
-import { world } from "../..";
+import { world, recordSurvival, formatSurvival } from "../..";
 import { GLOBAL_UNIT_MULTIPLIER, TICKS_PER_SECOND } from "../../constants";
 import { Entity, Inventory } from "../../types/entity";
 import { CircleHitbox, Vec2 } from "../../types/math";
@@ -54,6 +54,9 @@ export default class Player extends Entity {
 	accessToken?: string;
 	killCount = 0;
 	currencyChanged = false;
+	// Survival tracking — set on spawn, used to compute how long the player lasted.
+	joinTime = Date.now();
+	deathRecorded = false;
 
 	constructor(id: string, username: string, skin: string | null, deathImg: string | null, accessToken?: string, isMobile?: boolean) {
 		super();
@@ -289,12 +292,21 @@ export default class Player extends Entity {
 			world.entities.push(item);
 		}
 		world.playerDied();
-		// Add kill count to killer
-		if (this.potentialKiller) {
-			const entity = world.entities.find(e => e.id == this.potentialKiller);
-			if (entity?.type === this.type) {
-				(<Player>entity).killCount++;
-				world.killFeeds.push({ killFeed: `${(<Player>entity).username} killed ${this.username} with ${(<Player>entity).lastHolding}`, killer: (<Player>entity).id});
+		// Record death once (die() may fire again on socket close) — survival time + kill feed.
+		if (!this.deathRecorded) {
+			this.deathRecorded = true;
+			const survivedMs = Date.now() - this.joinTime;
+			recordSurvival(this.username, survivedMs, this.killCount);
+			// Add kill count to killer and announce the kill with the victim's survival time.
+			if (this.potentialKiller) {
+				const entity = world.entities.find(e => e.id == this.potentialKiller);
+				if (entity?.type === this.type) {
+					(<Player>entity).killCount++;
+					world.killFeeds.push({ killFeed: `${(<Player>entity).username} killed ${this.username} with ${(<Player>entity).lastHolding} (survived ${formatSurvival(survivedMs)})`, killer: (<Player>entity).id});
+				}
+			} else {
+				// No killer (red zone, drowning, disconnect) — still announce how long they lasted.
+				world.killFeeds.push({ killFeed: `${this.username} died (survived ${formatSurvival(survivedMs)})`, killer: this.id });
 			}
 		}
 		// Add currency to user if they are logged in and have kills
