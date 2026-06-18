@@ -899,3 +899,142 @@ div#menu div.panel#account {
     font-size: 0.9em;
     white-space: nowrap;
 }
+
+/* ============================================================
+   Menu polish — cohesive layout, clean panels & login form.
+   Appended last so these win the cascade over earlier rules.
+   ============================================================ */
+#menu:not(.hidden) {
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 1.5vw;
+    padding: 5vh 2vw 2vh;
+    box-sizing: border-box;
+}
+
+div#menu div.panel {
+    height: auto;
+    max-height: 80vh;
+    overflow-y: auto;
+    min-width: 220px;
+    max-width: 340px;
+    flex: 1 1 280px;
+    margin: 0;
+    padding: 1.6vw;
+    background-color: rgba(12, 18, 12, 0.82);
+    border: 1px solid rgba(128, 178, 81, 0.35);
+    border-radius: 14px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    color: #fff;
+    text-align: center;
+}
+
+div#menu div#connection.panel {
+    flex: 1 1 280px;
+}
+
+#menu .panel h1 {
+    font-size: 1.5vw;
+    margin: 0 0 1vh;
+    color: #80B251;
+}
+
+#menu .panel p {
+    margin: 0.4vh 0;
+    opacity: 0.85;
+}
+
+/* Login / connection inputs */
+#menu input[type="text"], #menu input[type="password"] {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 1.1vh 1vh;
+    margin: 0.6vh 0;
+    background-color: rgba(0, 0, 0, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    color: #fff;
+    text-align: center;
+    font-size: 0.95vw;
+    transition: border-color 0.15s, background-color 0.15s;
+}
+
+#menu input[type="text"]:focus, #menu input[type="password"]:focus {
+    outline: none;
+    border-color: #80B251;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+#menu input::placeholder { color: rgba(255, 255, 255, 0.5); }
+
+/* Buttons inside menu panels */
+.panel .button {
+    font-size: 0.95vw;
+    padding: 1.1vh 1.2vw;
+    margin: 1vh auto;
+    background-color: #80B251;
+    color: #0c120c;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.15s, transform 0.05s;
+}
+
+.panel .button:hover { background-color: #93c763; }
+.panel .button:active { transform: translateY(1px); }
+
+#connection .button#connect {
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 1.2vw;
+    padding: 1.4vh;
+}
+
+.flex {
+    display: flex;
+    gap: 0.6vw;
+    justify-content: center;
+}
+
+.flex .button { flex: 1; }
+
+/* X (Twitter) icon — small fixed button (was an unconstrained full-size SVG) */
+.top-right-stuff {
+    top: 1.5vh;
+    right: 1.5vh;
+    z-index: 10;
+}
+
+.discord {
+    width: 44px;
+    height: 44px;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: rgba(12, 18, 12, 0.82);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    transition: background-color 0.15s;
+}
+
+.discord:hover { background-color: rgba(128, 178, 81, 0.85); }
+.discord svg { width: 100%; height: 100%; display: block; }
+
+/* Change Loadout — clean top-left button */
+.loadout {
+    top: 1.5vh;
+    left: 1.5vh;
+    background-color: rgba(12, 18, 12, 0.82);
+    border: 1px solid rgba(128, 178, 81, 0.45);
+    color: #fff;
+    padding: 1vh 1.2vw;
+    border-radius: 10px;
+    font-weight: bold;
+    transition: background-color 0.15s;
+}
+
+.loadout:hover { background-color: rgba(128, 178, 81, 0.85); }
+
+.online-count { font-size: 1vw; }
