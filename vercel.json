@@ -1,14 +1,24 @@
 {
-	"functions": {
-		"api/index.ts": {
-			"memory": 256,
-			"includeFiles": "**/*"
-		}
-	},
+	"$schema": "https://openapi.vercel.sh/vercel.json",
+	"installCommand": "echo 'Skipping root install; client build installs its own deps'",
+	"buildCommand": "bash scripts/build-vercel.sh",
+	"outputDirectory": "dist",
 	"rewrites": [
 		{
+			"source": "/api/:path*",
+			"destination": "https://REPLACE_WITH_RAILWAY_API_DOMAIN/api/:path*"
+		},
+		{ "source": "/loadout", "destination": "/loadout.html" },
+		{ "source": "/deathMarker", "destination": "/deathMarker.html" }
+	],
+	"headers": [
+		{
 			"source": "/(.*)",
-			"destination": "/api"
+			"headers": [
+				{ "key": "X-Frame-Options", "value": "SAMEORIGIN" },
+				{ "key": "Referrer-Policy", "value": "same-origin" },
+				{ "key": "X-XSS-Protection", "value": "1; mode=block" }
+			]
 		}
 	]
 }

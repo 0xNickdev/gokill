@@ -10,6 +10,9 @@
 client/scripts/bundle.min.js
 .vercel
 
+# Vercel static build output
+dist
+
 bin
 .vs
 Islandr.code-workspace

@@ -68,9 +68,10 @@ declare type modeMapColourType = keyof typeof modeMapColours
  * @param address Websocket address from the <input> tag
  */
 async function init(address: string) {
-	// Initialize the websocket
-	var protocol = "ws";
-	// if ((<HTMLInputElement>document.getElementById("wss")).checked) protocol += "s";
+	// Initialize the websocket.
+	// Use a secure socket (wss) automatically when the page itself is served over
+	// HTTPS (e.g. on Vercel), otherwise browsers block the insecure ws:// connection.
+	var protocol = location.protocol === "https:" ? "wss" : "ws";
 	ws = new WebSocket(`${protocol}://${address}`);
 	ws.binaryType = "arraybuffer";
 

@@ -104,8 +104,10 @@ export function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w
 	if (stroke) ctx.stroke();
 }
 export function loadoutChange(accessToken: string, skin: string, delta: number) {
-	fetch((process.env.API_URL || "http://localhost:8000") + "/api/currency-decrement", { method: "POST", headers: {"Content-Type": "application/json" }, body: JSON.stringify({ accessToken, delta }) })
+	// Relative paths: in production Vercel proxies /api/* to the Railway API service
+	// (same origin from the browser, so no CORS); locally the Express server answers directly.
+	fetch("/api/currency-decrement", { method: "POST", headers: {"Content-Type": "application/json" }, body: JSON.stringify({ accessToken, delta }) })
 		.catch(console.error);
-	fetch((process.env.API_URL || "http://localhost:8000") + "/api/addSkins", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ accessToken, skin }) })
+	fetch("/api/addSkins", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ accessToken, skin }) })
 		.catch(console.error);
 }

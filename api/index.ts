@@ -5,7 +5,7 @@ import express from "express";
 import { verbose } from "sqlite3";
 const sqlite3 = verbose();
 
-const db = new sqlite3.Database("players.db");
+const db = new sqlite3.Database(process.env.DB_PATH || "players.db");
 db.get("SELECT name FROM sqlite_master WHERE type='table' AND name='players'", (err, row) => {
 	if (err) throw err;
 	if (!row) db.run("CREATE TABLE players (id integer PRIMARY KEY AUTOINCREMENT, username varchar(255) NOT NULL, password char(16) NOT NULL, access_token char(128), games_played int DEFAULT 0, kills int DEFAULT 0, currency int DEFAULT 0, skinsAvailable varchar(255) DEFAULT 'default;')");
