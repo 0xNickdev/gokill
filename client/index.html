@@ -1,219 +1,280 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-  <title>Islandr.io</title>
+  <title>GoKill — 2D Battle Royale</title>
   <meta charset="utf-8">
-  <meta name="description" content="A 2D browser shooter game inspired by surviv.io">
-  <meta name="keywords" content="2D, browser, shooter, game, surviv.io, island, survivor, shoot, io, io games, game, fun, educative, two-dimensional, guns, videogame, islandr">
+  <meta name="description" content="GoKill — a fast, free 2D browser battle royale. Drop in, scavenge guns, outlast everyone, and be the last survivor standing.">
+  <meta name="keywords" content="GoKill, 2D, browser, shooter, battle royale, survival, io game, free game, last man standing, guns">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
   <meta name="robots" content="index, follow">
-  <meta name="author" content="Islandr's Developer Team">
-  <meta name="theme-color" content="#80B251">
+  <meta name="author" content="GoKill">
+  <meta name="theme-color" content="#0d130d">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta property="og:title" content="islandr.io">
+  <meta property="og:title" content="GoKill — 2D Battle Royale">
   <meta property="og:type" content="website">
   <meta property="og:image" content="assets/normal/favicon.png">
-  <meta property="og:description" content="A 2D browser shooter game inspired by surviv.io">
-  <meta property="og:url" content="http://www.islandr.io/">
+  <meta property="og:description" content="Drop in, scavenge, outlast. A fast free 2D battle royale in your browser.">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="canonical" href="http://www.islandr.io/" />
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Jura:wght@600;700&display=swap">
   <link rel="stylesheet" href="scripts/css/style.css" id="horizontal">
   <link rel="stylesheet" href="scripts/css/cookies.css">
+  <link rel="stylesheet" href="scripts/css/landing.css">
   <script src="/msgpack.min.js"></script>
 </head>
 
 <body>
-    <div id="loading">
-        <div class="loading-text">
-            Loading<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>
-        </div>
+  <div id="loading">
+    <div class="loading-text">
+      Loading<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>
     </div>
+  </div>
 
-    <div id="volume-icon"></div>
+  <div id="volume-icon"></div>
+  <div id="volume-slider">
+    <input type="range" min="0" max="100" value="50" step="1" id="volume-range">
+  </div>
+  <audio id="menu-audio" loop>
+    <source src="menu.wav" type="audio/wav">
+  </audio>
 
+  <!-- Cookie / privacy consent (functional hooks preserved) -->
+  <div class="overlays">
+    <div class="boxers">
+      <button id="button-close" class="button-close" onclick="closeBox()">✕</button>
+      <div id="privacy-box">
+        <h1>Privacy &amp; Cookies</h1>
+        <p>GoKill stores a small amount of information — your settings, login session, and game
+          preferences — to make the game work. We don't sell your data. By continuing you agree to
+          our basic use of cookies and local storage for accounts, loadouts, and matchmaking.</p>
+        <div>
+          <button id="button-accept" onclick="showAds()">Accept</button>
+          <button id="button-decline" class="button-decline" onclick="hideAds()">Decline</button>
+        </div>
+      </div>
+      <div class="panel">
+        <div id="cookies-button"><span id="cookies-span">Give me cookies</span></div>
+        <span>Cookies are used for storing settings and configurations.</span>
+        <img src="assets/normal/images/menu/cookies.jpg" />
+      </div>
+    </div>
+  </div>
 
-    <div id="volume-slider">
-        <input type="range" min="0" max="100" value="50" step="1" id="volume-range">
-    </div>
+  <div class="joystick-container">
+    <div class="joystick-handle"></div>
+  </div>
+  <div class="aimjoystick-container"><div class="aimjoystick-handle"></div></div>
 
-    <audio id="menu-audio" loop>
-        <source src="menu.wav" type="audio/wav">
-    </audio>
-    <div class="center">
-        <img id="logo"
-             src="https://svgtrace-upload-results-bucket.s3.amazonaws.com/2023-05-03/windows_273b5de6-0727-42a3-9469-544417294d54_1683141443489.svg"
-             alt="Islandr Logo"
-             draggable="false">
-    </div>
+  <canvas id="game"></canvas>
+  <form id="hidden-form" class="hidden"></form>
 
-    <div class="overlays">
-        <div class="boxers">
-            <div id="privacy-box">
-                <h1>Privacy Policy</h1>
-                This privacy notice for islandr (Company, we, us, or our), describes how and why we might
-                collect, store, use, and/or share (process) your information when you use our services (Services), such as when
-                you: This summary provides key points from our privacy notice, but you can find out more details about any of
-                these topics by clicking the link following each key point or by using our table of contents below to find the
-                section you are looking for. When you visit, use, or navigate our Services, we may process personal information
-                depending on how you interact with islandr and the Services, the choices you make, and the products and features
-                you use.We process your information to provide, improve, and administer our Services, communicate with you, for
-                security and fraud prevention, and to comply with law. In what situations and with which parties do we share
-                personal information?Learn more about when and with whom we share your personal information. Depending on where
-                you
-                are located geographically, the applicable privacy law may mean you have certain rights regarding your personal
-                information.Learn more about your privacy rights.<br>
-                3. WHAT LEGAL BASES DO WE RELY ON TO PROCESS YOUR PERSONAL
-                INFORMATION? In Short: We collect personal information that you provide to us.We collect personal information
-                that
-                you voluntarily provide to us when you express an interest in obtaining information about us or our products and
-                Services, when you participate in activities on the Services, or otherwise when you contact us.Personal
-                Information Provided by You. The personal information that we collect depends on the context of your
-                interactions
-                with us and the Services, the choices you make, and the products and features you use.The personal information
-                we
-                collect may include the following:If you choose to register in this way, we will collect the information
-                described
-                in the section called HOW DO WE HANDLE YOUR SOCIAL LOGINS? below.In Short: We process your information to
-                provide,
-                improve, and administer our Services, communicate with you, for security and fraud prevention, and to comply
-                with
-                law.We process your personal information for a variety of reasons, depending on how you interact with our
-                Services, including:In Short: We only process your personal information when we believe it is necessary and we
-                have a valid legal reason (i. e. , legal basis) to do so under applicable law, like with your consent, to comply
-                with laws, to provide you with services to enter into or fulfill our contractual obligations, to protect your
-                rights, or to fulfill our legitimate business interests. General Data Protection Regulation (GDPR) and UK GDPR
-                require us to explain the valid legal bases we rely on in order to process your personal information.As such, we
-                may rely on the following legal bases to process your personal information:We may process your information if
-                you
-                have given us permission (i. e. , consent) to use your personal information for a specific purpose.We may
-                process
-                your information where we believe it is necessary to protect your vital interests or the vital interests of a
-                third party, such as situations involving potential threats to the safety of any person.In Short: We may share
-                information in specific situations described in this section and/or with the following third parties.We may need
-                to share your personal information in the following situations:In Short: We are not responsible for the safety
-                of
-                any information that you share with third parties that we may link to or who advertise on our Services, but are
-                not affiliated with, our Services.We cannot guarantee the safety and privacy of data you provide to any third
-                parties. Any data collected by third parties is not covered by this privacy notice.We are not responsible for
-                the
-                content or privacy and security practices and policies of any third parties, including other websites or
-                applications that may be linked to or from the Services.In Short: If you choose to register or log in to our
-                Services using a social media account, we may have access to certain information about youServices offer you the
-                ability to register and log in using your third-party social media account details (like your Facebook or
-                Twitter). Where you choose to do this, we will receive certain profile information about you from your social
-                mediaprovider. The profile information we receive may vary depending on the social media provider concerned.
-                <div>
-                    <button id="button-accept" onclick="showAds()">Accept</button>
-                    <button id="button-decline" class="button-decline" onclick="hideAds()">Decline</button>
-                </div>
-            </div>
-            <button id="button-close" class="button-close" onclick="closeBox()">X</button>
-            <div class="panel">
-                <div id="cookies-button"><span id="cookies-span">Give me cookies</span></div>
-                <span>Cookies are used for storing settings and configurations.</span>
-                <img src="assets/normal/images/menu/cookies.jpg" />
-            </div>
-            <script></script>
+  <!-- ===================== LANDING / MENU ===================== -->
+  <div id="menu">
+
+    <!-- Top bar -->
+    <header class="gk-topbar">
+      <div class="loadout">Loadout</div>
+      <nav class="gk-nav">
+        <a href="#play">Play</a>
+        <a href="#lore">Story</a>
+        <a href="#how">How to play</a>
+        <a href="#survivors">Survivors</a>
+      </nav>
+      <div class="top-right-stuff">
+        <div class="discord" title="Follow us on X">
+          <svg viewBox="0 0 24 24" width="100%" height="100%" fill="#ffffff" xmlns="http://www.w3.org/2000/svg"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
         </div>
+      </div>
+    </header>
+
+    <!-- HERO + PLAY -->
+    <section class="gk-hero" id="play">
+      <div class="gk-hero__intro">
+        <div class="gk-badge">FREE · 2D BATTLE ROYALE</div>
+        <h1 class="gk-logo"><span class="gk-logo__go">Go</span><span class="gk-logo__kill">Kill</span></h1>
+        <p class="gk-tagline">One island. Dozens of survivors. Only one walks away.</p>
+        <p class="gk-subtag">Drop in with empty hands, scavenge guns from the wreckage, and outlast
+          everyone as the ground shrinks beneath your feet.</p>
+        <div class="gk-online-pill"><span class="gk-dot-live"></span><span id="online-count" class="online-count">Connecting…</span></div>
+      </div>
+
+      <div class="gk-cards">
+        <!-- PLAY CARD -->
+        <div class="panel gk-card" id="connection">
+          <div class="error-div hidden no-margin red" id="error-div">Hey</div>
+          <h2 class="gk-card__title">Enter the match</h2>
+          <input type="text" id="username" placeholder="Your survivor name">
+          <input type="text" id="address" placeholder="Server address" value="127.0.0.1:8080">
+
+          <div class="gk-mode-label">Game mode</div>
+          <div class="box-selectable">
+            <div class="mode_box" id="normal">
+              <div class="button" id="button-normal_mode">Normal</div>
+            </div>
+            <div class="mode_box" id="suroi-collab">
+              <div class="button" id="button-normal_mode">Suroi&nbsp;Collab</div>
+            </div>
+            <div class="mode_box" id="dfbg-collab">
+              <div class="button" id="button-normal_mode">DownFall&nbsp;BG</div>
+            </div>
+          </div>
+
+          <div class="button" id="connect">▶ PLAY NOW</div>
+        </div>
+
+        <!-- ACCOUNT CARD -->
+        <div class="panel gk-card" id="account">
+          <h1>Login / Sign up</h1>
+          <p class="gk-card__hint">Save your loadout, currency and survivor stats.</p>
+          <input type="text" id="login_username" placeholder="Username...">
+          <input type="password" id="password" placeholder="Password...">
+          <div class="flex">
+            <div class="button" id="button-login">Login</div>
+            <div class="button" id="button-signup">Sign up</div>
+          </div>
+        </div>
+      </div>
+
+      <a class="gk-scroll-cue" href="#lore">Discover the island ↓</a>
+    </section>
+
+    <!-- LORE -->
+    <section class="gk-section gk-lore" id="lore">
+      <div class="gk-section__head">
+        <span class="gk-eyebrow">The Story</span>
+        <h2 class="gk-section__title">The Last Island</h2>
+      </div>
+      <div class="gk-lore__body">
+        <p>When the old world drowned, the ocean kept only one scrap of land above the tide — a single
+          restless island that surfaces somewhere new with every storm.</p>
+        <p>The last survivors wash ashore with empty hands and one shared instinct: <strong>the island
+          keeps just one of you.</strong> Scavenge guns from the wreckage, patch yourself together, and
+          outlast everyone as the safe ground shrinks beneath your feet.</p>
+        <p>Every match is a new tide and a new island. Drop in, gear up, and be the last one standing.</p>
+      </div>
+    </section>
+
+    <!-- HOW TO PLAY -->
+    <section class="gk-section gk-how" id="how">
+      <div class="gk-section__head">
+        <span class="gk-eyebrow">The Objective</span>
+        <h2 class="gk-section__title">How to Play</h2>
+        <p class="gk-section__sub">Last survivor wins. Simple to learn, brutal to master.</p>
+      </div>
+      <div class="gk-steps">
+        <div class="gk-step">
+          <div class="gk-step__num">1</div>
+          <h3>Drop &amp; Scavenge</h3>
+          <p>You start with nothing but your fists. Loot guns, ammo and healing from crates scattered
+            across the wreckage.</p>
+        </div>
+        <div class="gk-step">
+          <div class="gk-step__num">2</div>
+          <h3>Gear Up</h3>
+          <p>Carry up to four weapons, stock healing items and pick the gun that fits the fight —
+            close range or long shots.</p>
+        </div>
+        <div class="gk-step">
+          <div class="gk-step__num">3</div>
+          <h3>Survive the Shrink</h3>
+          <p>The safe zone closes in. Stay inside the ring or take damage as the map forces everyone
+            together.</p>
+        </div>
+        <div class="gk-step">
+          <div class="gk-step__num">4</div>
+          <h3>Be the Last One</h3>
+          <p>Outplay every other survivor. The island keeps just one of you — make sure it's you.</p>
+        </div>
+      </div>
+
+      <div class="gk-controls">
+        <h3 class="gk-controls__title">Controls</h3>
+        <div class="gk-controls__grid">
+          <div class="gk-key"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd><span>Move</span></div>
+          <div class="gk-key"><kbd>Mouse</kbd><span>Aim</span></div>
+          <div class="gk-key"><kbd>Left Click</kbd><span>Shoot</span></div>
+          <div class="gk-key"><kbd>1</kbd>–<kbd>4</kbd><span>Switch weapon</span></div>
+          <div class="gk-key"><kbd>R</kbd><span>Reload</span></div>
+          <div class="gk-key"><kbd>F</kbd><span>Interact</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOP SURVIVORS -->
+    <section class="gk-section gk-survivors" id="survivors">
+      <div class="gk-section__head">
+        <span class="gk-eyebrow">Leaderboard</span>
+        <h2 class="gk-section__title">Top Survivors</h2>
+        <p class="gk-section__sub">Ranked by who lasted the longest on the island.</p>
+      </div>
+      <div class="gk-leaderboard-wrap">
+        <ol id="leaderboard" class="leaderboard"><li>Loading…</li></ol>
+      </div>
+    </section>
+
+    <footer class="gk-footer">
+      <div class="gk-footer__brand"><span class="gk-logo__go">Go</span><span class="gk-logo__kill">Kill</span></div>
+      <p>v2 — New home page, self-hosted servers, and a fresh coat of paint. Follow us on X for updates.</p>
+      <p class="gk-footer__small">A 2D browser battle royale. Play free, no download.</p>
+    </footer>
+
+    <!-- legacy hidden helpers (kept for bundle compatibility) -->
+    <div class="hidden" id="server-error-panel"></div>
+    <div class="info hidden">info/news/changelog</div>
+    <div class="info-box">
+      New home page updated v2!
+      <div class="close">x</div>
     </div>
-    <div class="joystick-container">
-        <div class="joystick-handle"></div>
+  </div>
+
+  <!-- ===================== IN-GAME ===================== -->
+  <div class="ingame-panel hidden" id="settings">
+    <input type="button" id="disconnect" form="hidden-form" value="Disconnect" class="button purple" />
+    <input type="button" id="resume" form="hidden-form" value="Resume" class="button purple" />
+  </div>
+  <div id="hud" class="hidden">
+    <div id="playercountcontainer">
+      <span id="playercount">1</span>
+      <br />
+      <span id="alive">Alive</span>
     </div>
-    <div class="aimjoystick-container"> <div class="aimjoystick-handle"> </div> </div>
-    <canvas id="game"></canvas>
-    <form id="hidden-form" class="hidden"></form>
-    <div id="menu">
-        <div class="panel">
-            <div>
-                <h1>Info:</h1>
-                <p>About islandr.io:</p>When the old world drowned, the ocean kept only one scrap of land above the
-                tide — a single restless island that surfaces somewhere new with every storm. The last survivors wash
-                ashore with empty hands and one shared instinct: the island keeps just one of you. Scavenge guns from
-                the wreckage, patch yourself together, and outlast everyone as the safe ground shrinks beneath your feet.
-                Every match is a new tide and a new island. Drop in, gear up, and be the last one standing.
-            </div>
-            <div>
-                <h1>Changelog</h1> v2 — New home page, self-hosted servers, and a fresh coat of paint. Follow us on X for updates!
-            </div>
-            <div>
-                <h1>Top Survivors</h1>
-                <ol id="leaderboard" class="leaderboard"><li>Loading…</li></ol>
-            </div>
-        </div>
-        <div class="hidden" id="server-error-panel">
-        </div>
-        <div class="panel" id="connection">
-            <div class="error-div hidden no-margin red" id="error-div">Hey</div>
-            <input type="text" id="username" placeholder="Insert Username"><br>
-            <input type="text" id="address" placeholder="Input Server Address" value="127.0.0.1:8080"><br>
-            <div class="box-selectable">
-                <div class="mode_box" id="normal">
-                    <div class="button" id="button-normal_mode"> Normal Mode</div>
-                </div>
-                <div class="mode_box" id="suroi-collab">
-                    <div class="button" id="button-normal_mode"> Suroi-Collab Mode </div>
-                </div>
-                <div class="mode_box" id="dfbg-collab">
-                    <div class="button" id="button-normal_mode"> DownFall-BattleGround-Collab Mode </div>
-                </div>
-            </div>
-            <div class="arrow"></div>
-            <div id="online-count" class="online-count">Connecting…</div>
-            <div class="button" id="connect">Play</div>
-        </div>
-        <div class="panel" id="account">
-            <h1>Login / Sign up</h1>
-            <input type="text" id="login_username" placeholder="Username..." /><br>
-            <input type="password" id="password" placeholder="Password..." /><br>
-            <div class="flex">
-                <div class="button" id="button-login">Login</div>
-                <div class="button" id="button-signup">Sign up</div>
-            </div>
-        </div>
-        <div class="top-right-stuff">
-            <div class="discord" title="Follow us on X">
-                <svg viewBox="0 0 24 24" width="100%" height="100%" fill="#ffffff" xmlns="http://www.w3.org/2000/svg"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-            </div>
-        </div>
-        <div class="info">
-            info/news/changelog
-        </div>
-        <div class="info-box">
-            New home page updated v2!
-            <div class="close">
-                x
-            </div>
-        </div>
-        <div class="loadout">
-            Change Loadout
-        </div>
-    </div>
-    <div class="ingame-panel hidden" id="settings">
-        <input type="button" id="disconnect" form="hidden-form" value="Disconnect" class="button purple" />
-        <input type="button" id="resume" form="hidden-form" value="Resume" class="button purple" /> 
-    </div>
-    <div id="hud" class="hidden">
-        <div id="playercountcontainer">
-            <span id="playercount">1</span>
-            <br />
-            <span id="alive">Alive</span>
-        </div>
-        <table id="healing-container">
-            <!-- We populate this with JS -->
-        </table>
-        <div id="kill-feeds" ></div>
-        <div class="button" id="reload-btn">↻</div>
-        <div class="button" id="menu-btn">≡</div>
-        <table id="weapon-container">
-            <tr class="weapon-panel" id="weapon-panel-0"><td class="weapon-name-container"><span class="weapon-index">1</span><span class="weapon-name" id="weapon-name-0">&nbsp;</span></td><td class="weapon-image-container"><img class="weapon-image" id="weapon-image-0" /></td></tr>
-            <tr class="weapon-panel" id="weapon-panel-1"><td class="weapon-name-container"><span class="weapon-index">2</span><span class="weapon-name" id="weapon-name-1">&nbsp;</span></td><td class="weapon-image-container"><img class="weapon-image" id="weapon-image-1" /></td></tr>
-            <tr class="weapon-panel" id="weapon-panel-2"><td class="weapon-name-container"><span class="weapon-index">3</span><span class="weapon-name" id="weapon-name-2">&nbsp;</span></td><td class="weapon-image-container"><img class="weapon-image" id="weapon-image-2" /></td></tr>
-            <tr class="weapon-panel" id="weapon-panel-3"><td class="weapon-name-container"><span class="weapon-index">4</span><span class="weapon-name" id="weapon-name-3">&nbsp;</span></td><td class="weapon-image-container"><img class="weapon-image" id="weapon-image-3" /></td></tr>
-        </table>
-        <script src="scripts/bundle.min.js"></script>
-    </div>
+    <table id="healing-container"></table>
+    <div id="kill-feeds"></div>
+    <div class="button" id="reload-btn">↻</div>
+    <div class="button" id="menu-btn">≡</div>
+    <table id="weapon-container">
+      <tr class="weapon-panel" id="weapon-panel-0"><td class="weapon-name-container"><span class="weapon-index">1</span><span class="weapon-name" id="weapon-name-0">&nbsp;</span></td><td class="weapon-image-container"><img class="weapon-image" id="weapon-image-0" /></td></tr>
+      <tr class="weapon-panel" id="weapon-panel-1"><td class="weapon-name-container"><span class="weapon-index">2</span><span class="weapon-name" id="weapon-name-1">&nbsp;</span></td><td class="weapon-image-container"><img class="weapon-image" id="weapon-image-1" /></td></tr>
+      <tr class="weapon-panel" id="weapon-panel-2"><td class="weapon-name-container"><span class="weapon-index">3</span><span class="weapon-name" id="weapon-name-2">&nbsp;</span></td><td class="weapon-image-container"><img class="weapon-image" id="weapon-image-2" /></td></tr>
+      <tr class="weapon-panel" id="weapon-panel-3"><td class="weapon-name-container"><span class="weapon-index">4</span><span class="weapon-name" id="weapon-name-3">&nbsp;</span></td><td class="weapon-image-container"><img class="weapon-image" id="weapon-image-3" /></td></tr>
+    </table>
+  </div>
+
+  <script src="scripts/bundle.min.js"></script>
+  <script>
+    // Visual polish only — mode segmented highlight + smooth nav scroll.
+    (function () {
+      var boxes = document.querySelectorAll('.box-selectable .mode_box');
+      boxes.forEach(function (b, i) {
+        if (i === 0) b.classList.add('active');
+        b.addEventListener('click', function () {
+          boxes.forEach(function (x) { x.classList.remove('active'); });
+          b.classList.add('active');
+        });
+      });
+      document.querySelectorAll('.gk-nav a, .gk-scroll-cue').forEach(function (a) {
+        a.addEventListener('click', function (e) {
+          var id = a.getAttribute('href');
+          if (!id || id.charAt(0) !== '#') return;
+          var t = document.querySelector(id);
+          if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
+        });
+      });
+    })();
+  </script>
 </body>
 
 </html>
