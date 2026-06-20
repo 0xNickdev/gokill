@@ -1066,6 +1066,12 @@ div#menu div#connection.panel {
   color: rgba(238, 243, 232, 0.75);
 }
 
+/* Move the weapon slots (1-4) down so they no longer overlap the healing/
+   ammo items above them. The extra items keep their original spot. */
+#weapon-container {
+  top: 47%;
+}
+
 /* Weapon slots */
 .weapon-panel {
   background: rgba(11, 15, 11, 0.6);

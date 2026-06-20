@@ -117,8 +117,56 @@ body div#menu:not(.hidden) {
 #menu .loadout::before { content: "⚙"; color: var(--gk-green); }
 #menu .loadout:hover { border-color: var(--gk-green); background: rgba(111, 174, 58, 0.18); }
 
+/* Volume control — integrated into the top bar (not a lone floating icon) */
+#menu .gk-volume {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 42px;
+  padding: 0 14px;
+  background: var(--gk-panel);
+  border: 1px solid var(--gk-line);
+  border-radius: 10px;
+}
+#menu .gk-volume #volume-icon {
+  position: static;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  background-image: url('https://cdn-icons-png.flaticon.com/512/3524/3524659.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  filter: invert(1) brightness(1.6);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: opacity 0.15s;
+}
+#menu .gk-volume #volume-icon.muted { opacity: 0.35; }
+#menu .gk-volume #volume-slider {
+  display: block;
+  position: static;
+  top: auto; left: auto;
+  width: 92px;
+  height: 6px;
+  margin: 0;
+}
+#menu .gk-volume #volume-slider input[type="range"] {
+  width: 92px;
+  height: 6px;
+  background-color: rgba(255, 255, 255, 0.18);
+}
+#menu .gk-volume #volume-slider input[type="range"]::-webkit-slider-thumb {
+  width: 14px; height: 14px;
+  background-color: var(--gk-green);
+}
+#menu .gk-volume #volume-slider input[type="range"]::-moz-range-thumb {
+  width: 14px; height: 14px;
+  background-color: var(--gk-green);
+}
+
 /* X (Twitter) icon */
-#menu .top-right-stuff { position: static; display: flex; }
+#menu .top-right-stuff { position: static; display: flex; align-items: center; gap: 10px; }
 #menu .discord {
   width: 42px; height: 42px;
   padding: 11px;

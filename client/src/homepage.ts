@@ -145,19 +145,28 @@ if (!window.location.href!.includes("/loadout")) {
 			started = true;
 		}
 
-		volumeIcon.addEventListener('click', function () {
-			if (volumeSlider.style.display === 'none') {
-				volumeSlider.style.display = 'block';
-			} else {
-				volumeSlider.style.display = 'none';
-			}
-		});
+		// Initialise volume from the slider's default, and keep the slider visible inline.
+		audio.volume = Number(volumeRange.value) / 100;
+		volumeSlider.style.display = 'block';
 
+		function syncMuteIcon() {
+			volumeIcon.classList.toggle('muted', audio.muted || audio.volume === 0);
+		}
+
+		// Speaker icon = mute / unmute toggle.
+		volumeIcon.addEventListener('click', function () {
+			audio.muted = !audio.muted;
+			syncMuteIcon();
+		});
 
 		volumeRange.addEventListener('input', function () {
 			var volume = Number(volumeRange.value) / 100;
 			audio.volume = volume;
+			audio.muted = volume === 0;
+			syncMuteIcon();
 		});
+
+		syncMuteIcon();
 	});
 
 
