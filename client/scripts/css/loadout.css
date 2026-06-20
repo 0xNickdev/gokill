@@ -277,26 +277,35 @@ img { width: 100%; height: auto; vertical-align: bottom; }
 
 /* Cursor / healing tiles */
 #cursor, #healing { display: none; }
+.tab-hint { color: var(--gk-muted); font-size: 14px; margin: 0 0 14px; }
+.box-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px;
+}
 #cursor .box, #healing .box {
   position: static;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
-  width: 130px;
-  height: 70px;
-  margin: 0 10px 10px 0;
+  gap: 8px;
+  width: auto;
+  height: 64px;
+  margin: 0;
   padding: 10px;
   border: 1px solid var(--gk-line-soft);
   border-radius: 12px;
-  background: rgba(0, 0, 0, 0.3);
+  background: linear-gradient(180deg, var(--gk-panel-2), #101610);
   color: var(--gk-text);
   font-weight: 600;
+  font-size: 15px;
   cursor: pointer;
-  transition: all 0.15s;
+  transition: transform 0.12s, border-color 0.15s, background 0.15s;
 }
 #cursor .box:hover, #healing .box:hover {
   border-color: var(--gk-green);
   background: rgba(111, 174, 58, 0.16);
+  transform: translateY(-2px);
 }
 
 /* Preview panel (right side) */

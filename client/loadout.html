@@ -3,8 +3,8 @@
 
 <button id="loadout-button">Loadout</button>
 <div id="overlay"></div>
+<a id="loadout-back" href="/">← Back to menu</a>
 <div id="loadout-container">
-    <a id="loadout-back" href="/">← Back to menu</a>
     <div id="close-button" onclick="location.href='/'" title="Back to menu">✕</div>
     <div id="loadout-header">
         <h2 id="loadout-title">Loadout <span>&amp; Shop</span></h2>
@@ -160,24 +160,29 @@
                         </div>
                     </div>
                 </div>
-                </div>
             </section>
         </div>
     </div>
     <div class="tab-content" id="cursor">
-        <div class="box" onclick="changeCursor('move')">Aimer</div>
-        <div class="box" onclick="changeCursor('grab')">Hand</div>
-        <div class="box" onclick="changeCursor('crosshair')">Crosshair</div>
-        <div class="box" onclick="resetCursor()">Reset</div>
+        <p class="tab-hint">Choose how your in-game cursor looks.</p>
+        <div class="box-grid">
+            <div class="box" onclick="changeCursor('move')">🎯 Aimer</div>
+            <div class="box" onclick="changeCursor('grab')">✋ Hand</div>
+            <div class="box" onclick="changeCursor('crosshair')">✚ Crosshair</div>
+            <div class="box" onclick="resetCursor()">↺ Reset</div>
+        </div>
     </div>
 
 
     <div class="tab-content" id="healing">
-        <div class="box"></div>
-        <div class="box"></div>
-        <div class="box"></div>
-        <div class="box"></div>
-        <div class="box"></div>
+        <p class="tab-hint">Healing items you can carry into a match.</p>
+        <div class="box-grid">
+            <div class="box">🩹 Bandage</div>
+            <div class="box">💊 Pills</div>
+            <div class="box">🥤 Soda</div>
+            <div class="box">🍫 Chocolate</div>
+            <div class="box">🥧 Pie</div>
+        </div>
     </div>
 </div>
 <div id="container2">
