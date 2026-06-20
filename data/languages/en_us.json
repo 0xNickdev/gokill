@@ -62,6 +62,10 @@
 	"hud.weapon.tec-9": "TEC-9",
 	"hud.weapon.fn_five_seven": "FN Five Seven",
 
+	"hud.weapon.frag": "Frag Grenade",
+	"hud.weapon.frag_grenade": "Frag Grenade",
+	"hud.weapon.mirv": "MIRV Grenade",
+	"hud.weapon.smoke": "Smoke Grenade",
 
 	"hud.weapon.fists": "Fists"
 }
