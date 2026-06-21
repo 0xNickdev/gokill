@@ -102,6 +102,16 @@
     <!-- HERO + PLAY -->
     <section class="gk-hero" id="play">
       <div class="gk-hero__intro">
+        <!-- Contract address pill. When the token launches, paste the address
+             into data-address="" below — the rest is automatic. -->
+        <div class="gk-ca" id="gk-ca" data-address="">
+          <span class="gk-ca__label">CA</span>
+          <span class="gk-ca__value" id="gk-ca-value">Coming soon</span>
+          <button class="gk-ca__copy" id="gk-ca-copy" type="button" aria-label="Copy contract address" title="Copy">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          </button>
+          <span class="gk-ca__copied">Copied!</span>
+        </div>
         <div class="gk-badge">FREE · 2D BATTLE ROYALE</div>
         <h1 class="gk-logo"><span class="gk-logo__go">Go</span><span class="gk-logo__kill">Kill</span></h1>
         <p class="gk-tagline">One island. Dozens of survivors. Only one walks away.</p>
@@ -330,6 +340,36 @@
 
   <script src="scripts/bundle.min.js"></script>
   <script>
+    // Contract-address pill: format + copy-to-clipboard.
+    (function () {
+      var ca = document.getElementById('gk-ca');
+      if (!ca) return;
+      var addr = (ca.getAttribute('data-address') || '').trim();
+      var valEl = document.getElementById('gk-ca-value');
+      var btn = document.getElementById('gk-ca-copy');
+      if (addr) {
+        valEl.textContent = addr.length > 18 ? addr.slice(0, 6) + '…' + addr.slice(-6) : addr;
+      } else {
+        ca.classList.add('empty');
+        valEl.textContent = 'Coming soon';
+      }
+      btn.addEventListener('click', function () {
+        if (!addr) return;
+        var done = function () {
+          ca.classList.add('copied');
+          setTimeout(function () { ca.classList.remove('copied'); }, 1400);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(addr).then(done).catch(function () {});
+        } else {
+          var t = document.createElement('textarea');
+          t.value = addr; document.body.appendChild(t); t.select();
+          try { document.execCommand('copy'); done(); } catch (e) {}
+          document.body.removeChild(t);
+        }
+      });
+    })();
+
     // Smooth nav scrolling (mode selection + active state handled in the bundle).
     (function () {
       document.querySelectorAll('.gk-nav a, .gk-scroll-cue').forEach(function (a) {
