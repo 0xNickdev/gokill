@@ -19,3 +19,6 @@ Islandr.code-workspace
 Islandr.io.njsproj
 Islandr.io.sln
 obj
+
+# macOS
+.DS_Store
